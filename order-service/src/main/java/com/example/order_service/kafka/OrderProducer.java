@@ -1,6 +1,6 @@
 package com.example.order_service.kafka;
 
-import com.example.base_domains.dto.OrderEvents;
+import com.example.base_domains.dto.OrderEvent;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +17,18 @@ public class OrderProducer {
 
     private NewTopic topic;
 
-    private KafkaTemplate<String, OrderEvents> kafkaTemplate;
+    private KafkaTemplate<String, OrderEvent> kafkaTemplate;
 
-    public OrderProducer(NewTopic topic, KafkaTemplate<String, OrderEvents> kafkaTemplate) {
+    public OrderProducer(NewTopic topic, KafkaTemplate<String, OrderEvent> kafkaTemplate) {
         this.topic = topic;
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendMessage(OrderEvents orderEvents) {
+    public void sendMessage(OrderEvent orderEvents) {
         LOGGER.info("Order event sent -> {}", orderEvents.toString());
 
         //create message
-        Message<OrderEvents> message = MessageBuilder.withPayload(orderEvents)
+        Message<OrderEvent> message = MessageBuilder.withPayload(orderEvents)
                 .setHeader(KafkaHeaders.TOPIC, topic.name())
                 .build();
 
